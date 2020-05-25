@@ -14,6 +14,13 @@ app.listen(port, () => {
 app.get('/api/courses', (request, response) => {
     response.send([1, 2, 3]);
 });
+
+app.get('/api/courses/:id', (request, response) => {
+    response.send(request.params.id);
+});
+app.get('/api/posts/:year/:month', (request, response) => {
+    response.send(request.params);
+});
 //app.post();
 //app.put();
 //app.delete();
