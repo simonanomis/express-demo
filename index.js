@@ -25,9 +25,10 @@ app.get('/api/courses', (request, response) => {
 
 app.get('/api/courses/:id', (request, response) => {
     const course = courses.find(course => course.id === parseInt(request.params.id));
-    if (!course) response.status(404).send('The course is not found');
+    if (!course) return response.status(404).send('The course is not found');
     response.send(course);
 });
+
 app.get('/api/posts/:year/:month', (request, response) => {
     response.send(request.params);
 });
@@ -36,11 +37,7 @@ app.get('/api/posts/:year/:month', (request, response) => {
 
 app.post('/api/courses/', (request, response) => {
     const { error } = validateCourse(request.body);
-    if(error) {
-        //400 Bad request
-        response.status(400).send(result.error);
-        return; 
-    }
+    if(error) return response.status(400).send(result.error);
 
     const course = {
         id: courses.length + 1, 
@@ -54,14 +51,10 @@ app.post('/api/courses/', (request, response) => {
 app.put('/api/courses/:id', (request, response) => {
     //look up an course if not exist, return 404
     const course = courses.find(course => course.id === parseInt(request.params.id));
-    if (!course) response.status(404).send('The course is not found');
+    if (!course) return response.status(404).send('The course is not found');
    
     const { error } = validateCourse(request.body);
-    if(error) {
-        //400 Bad request
-        response.status(400).send(result.error);
-        return; 
-    }
+    if(error) return response.status(400).send(result.error);
 
     //update course
     course.name = request.body.name;
@@ -79,4 +72,16 @@ function validateCourse(course) {
 
    return Joi.validate(course, schema);
 }
-//app.delete();
+
+//DELETE
+app.delete('/api/courses/:id', (request, response) => {
+    //look up the course, if does not exist look 404
+    const course = courses.find(course => course.id === parseInt(request.params.id));
+    if (!course) return response.status(404).send('The course is not found');
+    //delete
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+
+    //return
+    response.send(course);
+});
