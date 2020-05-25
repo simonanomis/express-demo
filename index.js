@@ -43,7 +43,7 @@ app.get('/', (request, response) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Listening on port ${port}...` );
+    startupDebugger(`Listening on port ${port}...` );
 });
 
 app.get('/api/courses', (request, response) => {
