@@ -2,6 +2,8 @@ const logger = require('./logger');
 const authenticate = require('./auth');
 
 const Joi = require('@hapi/joi');
+const helmet = require('helmet');
+const morgan = require('morgan');
 const express = require('express');
 const app = express();
 
@@ -10,6 +12,13 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.use(logger);
 app.use(authenticate);
+app.use(helmet());
+
+if (app.get('env') === 'development') {
+    app.use(morgan('tiny'));
+    console.log('Morgan enabled');
+}
+
 
 const courses = [
     {id: 1, name: 'course 1'},
