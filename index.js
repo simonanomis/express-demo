@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 
 const courses = [
     {id: 1, name: 'course 1'},
@@ -7,6 +8,7 @@ const courses = [
     {id: 3, name: 'course 3'},
 ];
 
+//GET
 app.get('/', (request, response) => {
     response.send('Hello Simona!!!');
 });
@@ -28,6 +30,16 @@ app.get('/api/courses/:id', (request, response) => {
 app.get('/api/posts/:year/:month', (request, response) => {
     response.send(request.params);
 });
-//app.post();
+
+//CREATE
+
+app.post('/api/courses/', (request, response) => {
+    const course = {
+        id: courses.length + 1, 
+        name: request.body.name
+    };
+    courses.push(course);
+    response.send(course);
+});
 //app.put();
 //app.delete();
