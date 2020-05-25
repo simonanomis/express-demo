@@ -1,6 +1,8 @@
 const logger = require('./logger');
 const authenticate = require('./auth');
 
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db'); 
 const config = require('config');
 const Joi = require('@hapi/joi');
 const helmet = require('helmet');
@@ -22,9 +24,11 @@ console.log('Mail Password: ' + config.get('mail.password'));
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
-    console.log('Morgan enabled');
+    startupDebugger('Morgan enabled');
 }
 
+//DB work
+dbDebugger('Starting the database...');
 
 const courses = [
     {id: 1, name: 'course 1'},
