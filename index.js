@@ -1,5 +1,5 @@
 const logger = require('./middleware/logger');
-const authenticate = require('./auth');
+const authenticate = require('./middleware/auth');
 const courses = require('./routes/courses');
 const home = require('./routes/home');
 
