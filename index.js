@@ -11,6 +11,9 @@ const morgan = require('morgan');
 const express = require('express');
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -39,7 +42,7 @@ const courses = [
 
 //GET
 app.get('/', (request, response) => {
-    response.send('Hello Simona!!!');
+    response.render('index', { title: 'My Express App', message: 'Hello Simona'});
 });
 
 const port = process.env.PORT || 3000;

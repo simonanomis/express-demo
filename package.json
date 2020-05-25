@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "helmet": "^3.22.0",
     "morgan": "^1.10.0",
+    "pug": "^3.0.0",
     "supports-color": "^7.1.0"
   }
 }
