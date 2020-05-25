@@ -3,6 +3,7 @@ const authenticate = require('./auth');
 
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db'); 
+const appDebugger = require('debug')('app:app'); 
 const config = require('config');
 const Joi = require('@hapi/joi');
 const helmet = require('helmet');
@@ -18,9 +19,9 @@ app.use(authenticate);
 app.use(helmet());
 
 //Configuration
-console.log('App Name: ' + config.get('name'));
-console.log('Mail Server: ' + config.get('mail.host'));
-console.log('Mail Password: ' + config.get('mail.password')); 
+appDebugger('App Name: ' + config.get('name'));
+appDebugger('Mail Server: ' + config.get('mail.host'));
+appDebugger('Mail Password: ' + config.get('mail.password')); 
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
