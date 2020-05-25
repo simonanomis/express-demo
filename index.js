@@ -1,6 +1,7 @@
 const logger = require('./logger');
 const authenticate = require('./auth');
 
+const config = require('config');
 const Joi = require('@hapi/joi');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -13,6 +14,11 @@ app.use(express.static('public'));
 app.use(logger);
 app.use(authenticate);
 app.use(helmet());
+
+//Configuration
+console.log('App Name: ' + config.get('name'));
+console.log('Mail Server: ' + config.get('mail.host'));
+console.log('Mail Password: ' + config.get('mail.password')); 
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
