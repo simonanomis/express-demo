@@ -1,3 +1,4 @@
+const Joi = require('@hapi/joi');
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -34,6 +35,18 @@ app.get('/api/posts/:year/:month', (request, response) => {
 //CREATE
 
 app.post('/api/courses/', (request, response) => {
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.validate(request.body, schema);
+
+    if(result.error) {
+        //400 Bad request
+        response.status(400).send(result.error);
+        return; 
+    }
+
     const course = {
         id: courses.length + 1, 
         name: request.body.name
