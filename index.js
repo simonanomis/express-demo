@@ -38,9 +38,6 @@ if (app.get('env') === 'development') {
 //DB work
 dbDebugger('Starting the database...');
 
-
-
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     startupDebugger(`Listening on port ${port}...` );

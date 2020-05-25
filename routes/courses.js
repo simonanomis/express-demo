@@ -19,7 +19,6 @@ router.get('/:id', (request, response) => {
 });
 
 //CREATE
-
 router.post('/', (request, response) => {
     const { error } = validateCourse(request.body);
     if(error) return response.status(400).send(result.error);
