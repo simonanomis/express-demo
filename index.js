@@ -1,5 +1,7 @@
-const logger = require('./logger');
+const logger = require('./middleware/logger');
 const authenticate = require('./auth');
+const courses = require('./routes/courses');
+const home = require('./routes/home');
 
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db'); 
@@ -20,6 +22,8 @@ app.use(express.static('public'));
 app.use(logger);
 app.use(authenticate);
 app.use(helmet());
+app.use('/api/courses', courses);
+app.use('/', home);
 
 //Configuration
 appDebugger('App Name: ' + config.get('name'));
@@ -34,85 +38,14 @@ if (app.get('env') === 'development') {
 //DB work
 dbDebugger('Starting the database...');
 
-const courses = [
-    {id: 1, name: 'course 1'},
-    {id: 2, name: 'course 2'},
-    {id: 3, name: 'course 3'},
-];
 
-//GET
-app.get('/', (request, response) => {
-    response.render('index', { title: 'My Express App', message: 'Hello Simona'});
-});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     startupDebugger(`Listening on port ${port}...` );
 });
 
-app.get('/api/courses', (request, response) => {
-    response.send(courses);
-});
-
-app.get('/api/courses/:id', (request, response) => {
-    const course = courses.find(course => course.id === parseInt(request.params.id));
-    if (!course) return response.status(404).send('The course is not found');
-    response.send(course);
-});
-
 app.get('/api/posts/:year/:month', (request, response) => {
     response.send(request.params);
-});
-
-//CREATE
-
-app.post('/api/courses/', (request, response) => {
-    const { error } = validateCourse(request.body);
-    if(error) return response.status(400).send(result.error);
-
-    const course = {
-        id: courses.length + 1, 
-        name: request.body.name
-    };
-    courses.push(course);
-    response.send(course);
-});
-
-//UPDATE
-app.put('/api/courses/:id', (request, response) => {
-    //look up an course if not exist, return 404
-    const course = courses.find(course => course.id === parseInt(request.params.id));
-    if (!course) return response.status(404).send('The course is not found');
-   
-    const { error } = validateCourse(request.body);
-    if(error) return response.status(400).send(result.error);
-
-    //update course
-    course.name = request.body.name;
-    //return the updated course
-    response.send(course);
-
-});
-
-function validateCourse(course) {
-    //validate
-    //if invalid, return, 400
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-   return Joi.validate(course, schema);
-}
-
-//DELETE
-app.delete('/api/courses/:id', (request, response) => {
-    //look up the course, if does not exist look 404
-    const course = courses.find(course => course.id === parseInt(request.params.id));
-    if (!course) return response.status(404).send('The course is not found');
-    //delete
-    const index = courses.indexOf(course);
-    courses.splice(index, 1);
-
-    //return
-    response.send(course);
 });
